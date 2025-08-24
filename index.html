@@ -1,68 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QR Code Generator</title>
-  <link rel="stylesheet" href="style.css"/>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- QR library (qrcodejs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Company Logo" class="logo"/>
-    <h1>QR Code Generator</h1>
-  </header>
-
-  <!-- QR Generator Section -->
-  <main>
-    <section class="generator">
-      <h2>Create Your QR Code</h2>
-      <input type="text" id="qr-url" placeholder="Enter your URL here" />
-      
-      <div class="controls">
-        <label>Pick Color: </label>
-        <input type="color" id="qr-color" value="#00a8a8"/>
-
-        <label>Upload Logo: </label>
-        <input type="file" id="qr-logo" accept="image/*"/>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-left">
+        <img src="logo.png" alt="Logo" class="brand-logo" />
+        <div class="brand-title">
+          <h1>QR Code Generator</h1>
+          <p class="tagline">صمّم، عدّل، وحمّل كيوآر كود احترافي بلون وبراند شركتك</p>
+        </div>
       </div>
 
-      <div id="qr-preview"></div>
-      <button id="download-btn">Download QR</button>
+      <div class="brand-right">
+        <button id="navGenerator" class="nav-btn active">Generator</button>
+        <button id="navDashboard" class="nav-btn">Dashboard</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Generator View -->
+    <section id="viewGenerator" class="panel view active">
+      <div class="generator">
+        <h2>مولّد الكيو آر (Preview مباشر)</h2>
+
+        <label class="field">
+          <span>أدخل رابط أو نص</span>
+          <input id="inputData" type="text" placeholder="https://example.com أو أي نص" />
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span>لون الكيو آر</span>
+            <input id="inputQrColor" type="color" value="#000000" />
+          </label>
+
+          <label class="field">
+            <span>لون الخلفية</span>
+            <input id="inputBgColor" type="color" value="#ffffff" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>ضع لوجو داخل الكيو آر (اختياري)</span>
+          <input id="inputLogo" type="file" accept="image/*" />
+        </label>
+
+        <label class="field">
+          <span>حجم الشعار داخل الكيو آر (%)</span>
+          <input id="inputLogoSize" type="range" min="8" max="36" value="20" />
+        </label>
+
+        <div class="actions">
+          <button id="btnClear" class="btn ghost">مسح</button>
+          <button id="btnGenerate" class="btn primary">تحديث المعاينة</button>
+        </div>
+
+        <div class="status">
+          <span id="planInfo">الخطة الحالية: <strong id="currentPlanLabel">Free</strong></span>
+          <span id="quotaInfo"> — المتبقي هذا الشهر: <strong id="remainingCount">0</strong></span>
+        </div>
+
+        <div class="preview-wrap">
+          <div id="previewBox" class="preview-box" aria-live="polite">
+            <div class="empty-note">اكتب رابط أو نص للمعاينة المباشرة</div>
+          </div>
+        </div>
+
+        <div class="download-row">
+          <a id="downloadPNG" class="btn download disabled" download>تحميل PNG</a>
+          <a id="downloadSVG" class="btn download disabled" download>تحميل SVG</a>
+          <button id="downloadPDF" class="btn download disabled">تحميل PDF</button>
+        </div>
+
+        <div id="message" class="message" role="status"></div>
+      </div>
+
+      <!-- Plans quick on generator page -->
+      <aside class="panel plans-inline">
+        <h3>اختر باقتك بسرعة</h3>
+        <div class="plans-grid-inline">
+          <div class="plan-card small" data-plan="free">
+            <h4>Free</h4>
+            <p>5 downloads / month</p>
+            <button class="plan-select btn ghost">اختيار</button>
+          </div>
+          <div class="plan-card small" data-plan="starter">
+            <h4>Starter</h4>
+            <p>50 downloads / month</p>
+            <button class="plan-select btn">اختيار</button>
+          </div>
+          <div class="plan-card small" data-plan="pro">
+            <h4>Pro</h4>
+            <p>200 downloads / month</p>
+            <button class="plan-select btn">اختيار</button>
+          </div>
+        </div>
+        <p class="note">العداد يحسب عند تحميل الملف فقط.</p>
+      </aside>
+    </section>
+
+    <!-- Dashboard View -->
+    <section id="viewDashboard" class="panel view">
+      <div class="dashboard">
+        <h2>Dashboard — History</h2>
+        <div class="dashboard-actions">
+          <button id="clearHistory" class="btn ghost">مسح السجل</button>
+          <button id="exportHistory" class="btn">تصدير CSV</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <!-- history entries will be injected here -->
+        </div>
+        <p class="note">تُحفظ السجلات محليًا في متصفحك (localStorage).</p>
+      </div>
     </section>
   </main>
 
-  <!-- Plans Section -->
-  <section class="plans">
-    <h2>Choose Your Plan</h2>
-    <div class="plan-cards">
-      <div class="plan">
-        <h3>Free</h3>
-        <p>✔ Generate up to 5 QR codes<br>✔ Basic colors<br>✔ No logo support</p>
-        <button>Select</button>
-      </div>
-      <div class="plan">
-        <h3>Starter</h3>
-        <p>✔ Generate up to 50 QR codes<br>✔ Custom colors<br>✔ Logo support</p>
-        <button>Select</button>
-      </div>
-      <div class="plan">
-        <h3>Pro</h3>
-        <p>✔ Unlimited QR codes<br>✔ Full customization<br>✔ Logo + Branding</p>
-        <button>Select</button>
-      </div>
-      <div class="plan">
-        <h3>Business</h3>
-        <p>✔ Unlimited QR codes<br>✔ Analytics<br>✔ Team access</p>
-        <button>Select</button>
-      </div>
-      <div class="plan">
-        <h3>Enterprise</h3>
-        <p>✔ Custom solutions<br>✔ Dedicated support<br>✔ SLA agreement</p>
-        <button>Select</button>
-      </div>
-    </div>
-  </section>
+  <footer class="site-footer">
+    <p>© 2025 Your Company — كل الحقوق محفوظة</p>
+  </footer>
 
+  <!-- Our script -->
   <script src="script.js"></script>
 </body>
 </html>
