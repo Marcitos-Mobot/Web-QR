@@ -1,55 +1,65 @@
-let usageCount = localStorage.getItem("usageCount") || 0;
-document.getElementById("usageCount").innerText = usageCount;
+let usage = 0;
+const qrCanvas = document.getElementById("qrCanvas");
+const ctx = qrCanvas.getContext("2d");
 
-const qrText = document.getElementById("qrText");
-const qrColor = document.getElementById("qrColor");
-const qrPreview = document.getElementById("qrPreview");
+document.getElementById("generateBtn").addEventListener("click", () => {
+  const text = document.getElementById("qrText").value;
+  const color = document.getElementById("qrColor").value;
+  const bg = document.getElementById("bgColor").value;
 
-function generateQR() {
-  qrPreview.innerHTML = "";
-  if(qrText.value.trim() === "") return;
-
-  const qr = new QRCode(qrPreview, {
-    text: qrText.value,
-    width: 200,
-    height: 200,
-    colorDark: qrColor.value,
-    colorLight: "#ffffff"
-  });
-}
-
-qrText.addEventListener("input", generateQR);
-qrColor.addEventListener("input", generateQR);
-
-function downloadQR(type) {
-  const img = qrPreview.querySelector("img") || qrPreview.querySelector("canvas");
-  if (!img) return;
-
-  const dataUrl = img.src || img.toDataURL();
-
-  if(type === "png"){
-    saveFile(dataUrl, "qrcode.png");
-  } else if(type === "svg"){
-    saveFile(dataUrl, "qrcode.svg");
-  } else if(type === "pdf"){
-    const pdf = new jsPDF();
-    pdf.addImage(dataUrl, "PNG", 10, 10, 100, 100);
-    pdf.save("qrcode.pdf");
+  if (!text) {
+    alert("من فضلك اكتب نص أو رابط");
+    return;
   }
 
-  usageCount++;
-  localStorage.setItem("usageCount", usageCount);
-  document.getElementById("usageCount").innerText = usageCount;
+  QRCode.toCanvas(qrCanvas, text, {
+    color: {
+      dark: color,
+      light: bg
+    }
+  }, (err) => {
+    if (err) console.error(err);
+    saveHistory();
+    usage++;
+    document.getElementById("usageCount").innerText = `مرات الاستخدام: ${usage}`;
+  });
+});
 
-  // حفظ في history
-  const history = JSON.parse(localStorage.getItem("qrHistory")) || [];
+function saveHistory() {
+  const dataUrl = qrCanvas.toDataURL();
+  let history = JSON.parse(localStorage.getItem("qrHistory")) || [];
   history.push(dataUrl);
   localStorage.setItem("qrHistory", JSON.stringify(history));
 }
 
-function saveFile(data, filename){
-  const a = document.createElement("a");
-  a.href = data;
-  a.download = filename;
-  a.click();
-}
+// تحميل PNG
+document.getElementById("downloadPNG").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.download = "qr.png";
+  link.href = qrCanvas.toDataURL();
+  link.click();
+});
+
+// تحميل SVG
+document.getElementById("downloadSVG").addEventListener("click", () => {
+  const text = document.getElementById("qrText").value;
+  const color = document.getElementById("qrColor").value;
+  const bg = document.getElementById("bgColor").value;
+
+  QRCode.toString(text, { type: "svg", color: { dark: color, light: bg } }, (err, svg) => {
+    if (err) throw err;
+    const blob = new Blob([svg], { type: "image/svg+xml" });
+    const link = document.createElement("a");
+    link.download = "qr.svg";
+    link.href = URL.createObjectURL(blob);
+    link.click();
+  });
+});
+
+// تحميل PDF
+document.getElementById("downloadPDF").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  pdf.addImage(qrCanvas.toDataURL(), "PNG", 20, 20, 100, 100);
+  pdf.save("qr.pdf");
+});

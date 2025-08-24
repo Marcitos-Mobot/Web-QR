@@ -1,54 +1,61 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مولد QR كود - ويب بروجيكت</title>
+  <title>مولد QR</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="شعار الشركة" class="logo">
-    <h1>مولد QR كود</h1>
+    <h1>مولد QR</h1>
   </header>
 
-  <main class="grid-container">
-    <!-- قسم QR -->
-    <section class="qr-section">
-      <h2>إنشئ QR كودك الآن</h2>
-      <input type="text" id="qrText" placeholder="اكتب الرابط أو النص هنا">
-
-      <label for="color">اختر لون الكود:</label>
-      <input type="color" id="qrColor" value="#00a8a8">
-
-      <div id="qrPreview" class="preview-box"></div>
-
-      <div class="buttons">
-        <button onclick="downloadQR('png')">تحميل PNG</button>
-        <button onclick="downloadQR('svg')">تحميل SVG</button>
-        <button onclick="downloadQR('pdf')">تحميل PDF</button>
+  <main class="grid">
+    <!-- إنشاء QR -->
+    <section class="qr-generator">
+      <h2>إنشاء كود QR</h2>
+      <input type="text" id="qrText" placeholder="اكتب النص أو الرابط هنا">
+      
+      <div class="color-options">
+        <label>لون QR:</label>
+        <input type="color" id="qrColor" value="#000000">
+        <label>خلفية:</label>
+        <input type="color" id="bgColor" value="#ffffff">
       </div>
 
-      <p>عدد الاستخدامات: <span id="usageCount">0</span></p>
+      <button id="generateBtn">توليد</button>
+
+      <div id="preview">
+        <canvas id="qrCanvas"></canvas>
+      </div>
+
+      <div class="download-buttons">
+        <button id="downloadPNG">تحميل PNG</button>
+        <button id="downloadSVG">تحميل SVG</button>
+        <button id="downloadPDF">تحميل PDF</button>
+      </div>
+
+      <p id="usageCount">مرات الاستخدام: 0</p>
     </section>
 
-    <!-- قسم الاشتراكات -->
+    <!-- الاشتراكات -->
     <aside class="plans">
       <h2>الباقات</h2>
       <ul>
-        <li>مجانية - 5 استخدامات</li>
-        <li>باقة صغيرة - 50 استخدام</li>
-        <li>باقة متوسطة - 200 استخدام</li>
-        <li>باقة كبيرة - 500 استخدام</li>
-        <li>باقة احترافية - 1000 استخدام</li>
-        <li>غير محدودة 🔥</li>
+        <li>الباقة 1: 5 أكواد</li>
+        <li>الباقة 2: 20 كود</li>
+        <li>الباقة 3: 50 كود</li>
+        <li>الباقة 4: 100 كود</li>
+        <li>الباقة 5: 200 كود</li>
+        <li class="unlimited">باقة غير محدودة 🚀</li>
       </ul>
     </aside>
   </main>
 
   <footer>
-    <p>جميع الحقوق محفوظة لشركة ويب بروجيكت © 2025</p>
-    <a href="history.html">سجل الأكواد</a>
+    <p>جميع الحقوق محفوظة لشركة ويب بروجيكت ©</p>
+    <a href="history.html">📜 صفحة History</a>
   </footer>
 
   <script src="script.js"></script>
