@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>مولد QR</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مولد QR كود - ويب بروجيكت</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo" class="logo"/>
-    <h1>مولد QR</h1>
+    <img src="logo.png" alt="شعار الشركة" class="logo">
+    <h1>مولد QR كود</h1>
   </header>
 
-  <main class="container">
-    <section class="qr-generator">
-      <h2>إنشاء كود QR</h2>
-      <input type="text" id="qrInput" placeholder="أدخل الرابط أو النص هنا"/>
+  <main class="grid-container">
+    <!-- قسم QR -->
+    <section class="qr-section">
+      <h2>إنشئ QR كودك الآن</h2>
+      <input type="text" id="qrText" placeholder="اكتب الرابط أو النص هنا">
 
-      <label>اختر اللون:</label>
-      <input type="color" id="qrColor" value="#000000"/>
+      <label for="color">اختر لون الكود:</label>
+      <input type="color" id="qrColor" value="#00a8a8">
 
-      <label>ارفع شعارك (اختياري):</label>
-      <input type="file" id="qrLogo" accept="image/*"/>
-
-      <div id="qrPreview" class="qr-preview"></div>
+      <div id="qrPreview" class="preview-box"></div>
 
       <div class="buttons">
-        <button id="generateBtn">توليد</button>
-        <button id="downloadPng">تحميل PNG</button>
-        <button id="downloadSvg">تحميل SVG</button>
-        <button id="downloadPdf">تحميل PDF</button>
+        <button onclick="downloadQR('png')">تحميل PNG</button>
+        <button onclick="downloadQR('svg')">تحميل SVG</button>
+        <button onclick="downloadQR('pdf')">تحميل PDF</button>
       </div>
+
+      <p>عدد الاستخدامات: <span id="usageCount">0</span></p>
     </section>
 
+    <!-- قسم الاشتراكات -->
     <aside class="plans">
       <h2>الباقات</h2>
-      <div class="plan">مجانية: كود واحد فقط</div>
-      <div class="plan">أساسية: 5 أكواد</div>
-      <div class="plan">احترافية: 20 كود</div>
-      <div class="plan">شركات: 100 كود</div>
-      <div class="plan">غير محدودة: أكواد بلا حدود</div>
+      <ul>
+        <li>مجانية - 5 استخدامات</li>
+        <li>باقة صغيرة - 50 استخدام</li>
+        <li>باقة متوسطة - 200 استخدام</li>
+        <li>باقة كبيرة - 500 استخدام</li>
+        <li>باقة احترافية - 1000 استخدام</li>
+        <li>غير محدودة 🔥</li>
+      </ul>
     </aside>
   </main>
 
   <footer>
-    <p>جميع الحقوق محفوظة لشركة ويب بروجيكت ©</p>
-    <a href="history.html">📜 عرض الأكواد السابقة</a>
+    <p>جميع الحقوق محفوظة لشركة ويب بروجيكت © 2025</p>
+    <a href="history.html">سجل الأكواد</a>
   </footer>
 
   <script src="script.js"></script>

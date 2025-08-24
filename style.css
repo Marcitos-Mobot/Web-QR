@@ -1,99 +1,100 @@
 body {
   font-family: 'Tahoma', sans-serif;
-  background: #f9fafa;
   margin: 0;
-  padding: 0;
+  background: #f9f9f9;
   color: #333;
+  direction: rtl;
 }
 
 header {
   background: #00a8a8;
-  color: #fff;
-  text-align: center;
+  color: white;
   padding: 1rem;
+  text-align: center;
 }
 
-header .logo {
+.logo {
   height: 50px;
 }
 
-.container {
+.grid-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
   padding: 2rem;
 }
 
-.qr-generator, .plans {
-  background: #fff;
+.qr-section, .plans {
+  background: white;
   padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.qr-generator h2, .plans h2 {
-  margin-bottom: 1rem;
-  color: #00a8a8;
+.preview-box {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px dashed #ccc;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-input, button {
-  display: block;
-  width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.7rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-button {
+.buttons button {
+  margin: 0.3rem;
+  padding: 0.5rem 1rem;
+  border: none;
   background: #00a8a8;
   color: white;
-  font-weight: bold;
+  border-radius: 5px;
   cursor: pointer;
-  border: none;
 }
 
-button:hover {
-  background: #007f7f;
+.buttons button:hover {
+  background: #007373;
 }
 
-.qr-preview {
-  margin: 1rem auto;
-  text-align: center;
-  min-height: 150px;
+.plans ul {
+  list-style: none;
+  padding: 0;
 }
 
-.plans .plan {
-  background: #f0fafa;
-  border: 1px solid #00a8a8;
-  padding: 1rem;
+.plans li {
   margin: 0.5rem 0;
-  border-radius: 10px;
+  padding: 0.5rem;
+  background: #f0f0f0;
+  border-radius: 5px;
 }
 
 footer {
-  background: #111;
-  color: white;
   text-align: center;
   padding: 1rem;
+  background: #222;
+  color: white;
   margin-top: 2rem;
 }
 
 footer a {
   color: #00a8a8;
-  margin-left: 10px;
   text-decoration: none;
 }
 
 .history-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
-  padding: 2rem;
+  padding: 1rem;
 }
 
-.history-container img {
-  width: 100%;
-  border: 2px solid #00a8a8;
-  border-radius: 10px;
+.history-item {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.history-item img {
+  max-width: 100%;
 }
