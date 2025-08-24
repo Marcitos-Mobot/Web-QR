@@ -7,28 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
+  <div class="container">
+
+    <!-- اللوجو -->
     <img src="logo.png" alt="Company Logo" class="logo">
+
     <h1>QR Code Generator</h1>
-  </header>
+    <input type="text" id="qrText" placeholder="Enter text or URL">
 
-  <main>
-    <div class="form-container">
-      <input type="text" id="qrText" placeholder="Enter your text or URL">
+    <div class="options">
+      <label>QR Color:</label>
       <input type="color" id="qrColor" value="#000000">
-      <button onclick="generateQR()">Generate QR Code</button>
+
+      <label>Background:</label>
+      <input type="color" id="qrBg" value="#ffffff">
+
+      <label>Size:</label>
+      <select id="qrSize">
+        <option value="128">Small</option>
+        <option value="256" selected>Medium</option>
+        <option value="512">Large</option>
+      </select>
     </div>
 
-    <div id="qrResult"></div>
-    <div id="downloadSection">
-      <button id="downloadBtn" onclick="downloadQR()">Download QR</button>
+    <button onclick="generateQR()">Preview QR</button>
+    <div id="qrcode"></div>
+    <button id="downloadBtn" style="display:none;">Download QR</button>
+
+    <!-- باقات افتراضية -->
+    <div class="packages">
+      <h2>Choose a Package</h2>
+      <button onclick="setText('Basic Plan')">Basic</button>
+      <button onclick="setText('Premium Plan')">Premium</button>
+      <button onclick="setText('Enterprise Plan')">Enterprise</button>
     </div>
-  </main>
+  </div>
 
-  <footer>
-    <p>Powered by <span class="brand">YourCompany</span></p>
-  </footer>
-
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
