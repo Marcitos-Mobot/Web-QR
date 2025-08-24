@@ -1,79 +1,83 @@
-let selectedPlan = "Free";
-let qrCount = 0;
-let planLimits = { Free: 5, Starter: 20, Pro: 100, Business: 500, Unlimited: Infinity };
+let qrCode;
+let history = JSON.parse(localStorage.getItem("qrHistory")) || [];
 
-function selectPlan(plan) {
-  selectedPlan = plan;
-  document.getElementById("selectedPlan").innerText = "Selected Plan: " + plan;
-  qrCount = 0; // reset count on plan change
+const qrInput = document.getElementById("qrInput");
+const qrColor = document.getElementById("qrColor");
+const qrLogo = document.getElementById("qrLogo");
+const preview = document.getElementById("qrPreview");
+const generateBtn = document.getElementById("generateBtn");
+
+if (generateBtn) {
+  generateBtn.addEventListener("click", generateQR);
 }
 
 function generateQR() {
-  let text = document.getElementById("qrText").value;
-  let color = document.getElementById("qrColor").value;
-  let bgColor = document.getElementById("qrBgColor").value;
-  let logoFile = document.getElementById("qrLogo").files[0];
+  preview.innerHTML = "";
+  const text = qrInput.value;
+  if (!text) return alert("أدخل نص أو رابط");
 
-  if (!text) {
-    alert("Please enter text or URL!");
-    return;
-  }
-
-  if (qrCount >= planLimits[selectedPlan]) {
-    alert("Plan limit reached! Upgrade your plan.");
-    return;
-  }
-
-  let canvas = document.getElementById("qrCanvas");
-
-  QRCode.toCanvas(canvas, text, {
-    color: {
-      dark: color,
-      light: bgColor
-    },
-    width: 250
-  }, async function (error) {
-    if (error) console.error(error);
-    if (logoFile) {
-      let ctx = canvas.getContext("2d");
-      let logo = new Image();
-      logo.src = URL.createObjectURL(logoFile);
-      logo.onload = function () {
-        let size = 60;
-        ctx.drawImage(logo, (canvas.width - size) / 2, (canvas.height - size) / 2, size, size);
-      }
-    }
+  const color = qrColor.value;
+  const canvas = document.createElement("canvas");
+  const qr = new QRious({
+    element: canvas,
+    value: text,
+    size: 200,
+    foreground: color
   });
 
-  // save to history
-  qrCount++;
-  let history = document.getElementById("qrHistory");
-  let img = document.createElement("img");
-  img.src = canvas.toDataURL();
-  history.appendChild(img);
+  // إضافة الشعار في منتصف الكود
+  if (qrLogo.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.onload = function() {
+        const w = 50, h = 50;
+        ctx.drawImage(img, (canvas.width-w)/2, (canvas.height-h)/2, w, h);
+        preview.appendChild(canvas);
+        saveToHistory(canvas.toDataURL());
+      }
+      img.src = e.target.result;
+    }
+    reader.readAsDataURL(qrLogo.files[0]);
+  } else {
+    preview.appendChild(canvas);
+    saveToHistory(canvas.toDataURL());
+  }
 }
 
-function downloadQR(format) {
-  let canvas = document.getElementById("qrCanvas");
-  let link = document.createElement("a");
+function saveToHistory(dataUrl) {
+  history.push(dataUrl);
+  localStorage.setItem("qrHistory", JSON.stringify(history));
+}
 
-  if (format === "png") {
-    link.href = canvas.toDataURL("image/png");
-    link.download = "qrcode.png";
-  } else if (format === "svg") {
-    QRCode.toString(document.getElementById("qrText").value, { type: "svg" }, function (err, string) {
-      let blob = new Blob([string], { type: "image/svg+xml" });
-      link.href = URL.createObjectURL(blob);
-      link.download = "qrcode.svg";
-      link.click();
-    });
-    return;
-  } else if (format === "pdf") {
-    const { jsPDF } = window.jspdf;
-    let pdf = new jsPDF();
-    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 20, 20, 100, 100);
-    pdf.save("qrcode.pdf");
-    return;
-  }
-  link.click();
+const historyContainer = document.getElementById("historyContainer");
+if (historyContainer) {
+  history.forEach(item => {
+    const img = document.createElement("img");
+    img.src = item;
+    historyContainer.appendChild(img);
+  });
+}
+
+// تحميل PNG
+document.getElementById("downloadPng")?.addEventListener("click", () => {
+  download("qr.png", preview.querySelector("canvas").toDataURL("image/png"));
+});
+
+// تحميل SVG
+document.getElementById("downloadSvg")?.addEventListener("click", () => {
+  alert("SVG يحتاج مكتبة إضافية للتحويل");
+});
+
+// تحميل PDF
+document.getElementById("downloadPdf")?.addEventListener("click", () => {
+  alert("PDF يحتاج مكتبة مثل jsPDF");
+});
+
+function download(filename, url) {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
 }

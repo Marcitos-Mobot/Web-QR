@@ -1,73 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QR Code Generator</title>
+  <title>مولد QR</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Logo" class="logo"/>
-    <h1>QR Code Generator</h1>
+    <h1>مولد QR</h1>
   </header>
 
-  <main>
-    <section class="generator">
-      <div class="form">
-        <label>Enter URL / Text</label>
-        <input type="text" id="qrText" placeholder="Enter text or link"/>
+  <main class="container">
+    <section class="qr-generator">
+      <h2>إنشاء كود QR</h2>
+      <input type="text" id="qrInput" placeholder="أدخل الرابط أو النص هنا"/>
 
-        <label>Foreground Color</label>
-        <input type="color" id="qrColor" value="#000000"/>
+      <label>اختر اللون:</label>
+      <input type="color" id="qrColor" value="#000000"/>
 
-        <label>Background Color</label>
-        <input type="color" id="qrBgColor" value="#ffffff"/>
+      <label>ارفع شعارك (اختياري):</label>
+      <input type="file" id="qrLogo" accept="image/*"/>
 
-        <label>Upload Logo</label>
-        <input type="file" id="qrLogo" accept="image/*"/>
+      <div id="qrPreview" class="qr-preview"></div>
 
-        <label>Select Plan</label>
-        <div class="plans">
-          <div class="plan" onclick="selectPlan('Free')">
-            <h3>Free</h3><p>Generate 5 QR Codes</p>
-          </div>
-          <div class="plan" onclick="selectPlan('Starter')">
-            <h3>Starter</h3><p>20 QR Codes</p>
-          </div>
-          <div class="plan" onclick="selectPlan('Pro')">
-            <h3>Pro</h3><p>100 QR Codes</p>
-          </div>
-          <div class="plan" onclick="selectPlan('Business')">
-            <h3>Business</h3><p>500 QR Codes</p>
-          </div>
-          <div class="plan" onclick="selectPlan('Unlimited')">
-            <h3>Unlimited</h3><p>No Limits</p>
-          </div>
-        </div>
-        <p id="selectedPlan">Selected Plan: Free</p>
-
-        <button onclick="generateQR()">Generate QR</button>
-      </div>
-
-      <div class="preview">
-        <h2>Preview</h2>
-        <canvas id="qrCanvas"></canvas>
-        <div class="download-btns">
-          <button onclick="downloadQR('png')">Download PNG</button>
-          <button onclick="downloadQR('svg')">Download SVG</button>
-          <button onclick="downloadQR('pdf')">Download PDF</button>
-        </div>
+      <div class="buttons">
+        <button id="generateBtn">توليد</button>
+        <button id="downloadPng">تحميل PNG</button>
+        <button id="downloadSvg">تحميل SVG</button>
+        <button id="downloadPdf">تحميل PDF</button>
       </div>
     </section>
 
-    <section class="history">
-      <h2>Dashboard (History)</h2>
-      <div id="qrHistory"></div>
-    </section>
+    <aside class="plans">
+      <h2>الباقات</h2>
+      <div class="plan">مجانية: كود واحد فقط</div>
+      <div class="plan">أساسية: 5 أكواد</div>
+      <div class="plan">احترافية: 20 كود</div>
+      <div class="plan">شركات: 100 كود</div>
+      <div class="plan">غير محدودة: أكواد بلا حدود</div>
+    </aside>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <footer>
+    <p>جميع الحقوق محفوظة لشركة ويب بروجيكت ©</p>
+    <a href="history.html">📜 عرض الأكواد السابقة</a>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
