@@ -1,113 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Code Generator</title>
-  <link rel="stylesheet" href="style.css"/>
-
-  <!-- jsPDF for PDF export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-  <!-- qrcode library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js" defer></script>
-  <!-- our script -->
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>QR Code Generator</h1>
-      <div class="plan">
-        <label for="plan-select">Plan:</label>
-        <select id="plan-select">
-          <option value="free">Free (10 downloads/month)</option>
-          <option value="pro">Pro (200 downloads/month)</option>
-          <option value="business">Business (Unlimited)</option>
-        </select>
-        <span id="quota-info"></span>
-        <button id="save-plan">Save Plan</button>
-      </div>
-    </header>
+  <header>
+    <img src="logo.png" alt="Company Logo" class="logo">
+    <h1>QR Code Generator</h1>
+  </header>
 
-    <main class="grid">
-      <section class="panel">
-        <h2>Inputs</h2>
+  <main>
+    <div class="form-container">
+      <input type="text" id="qrText" placeholder="Enter your text or URL">
+      <input type="color" id="qrColor" value="#000000">
+      <button onclick="generateQR()">Generate QR Code</button>
+    </div>
 
-        <label class="field">
-          <span>Text / URL</span>
-          <input id="text-input" type="text" placeholder="https://example.com or any text"/>
-        </label>
+    <div id="qrResult"></div>
+    <div id="downloadSection">
+      <button id="downloadBtn" onclick="downloadQR()">Download QR</button>
+    </div>
+  </main>
 
-        <div class="row">
-          <label class="field">
-            <span>QR Color</span>
-            <input id="qr-color" type="color" value="#000000"/>
-          </label>
+  <footer>
+    <p>Powered by <span class="brand">YourCompany</span></p>
+  </footer>
 
-          <label class="field">
-            <span>Background</span>
-            <input id="bg-color" type="color" value="#ffffff"/>
-          </label>
-        </div>
-
-        <div class="row">
-          <label class="field">
-            <span>Size</span>
-            <select id="qr-size">
-              <option value="200">200 px</option>
-              <option value="300">300 px</option>
-              <option value="500">500 px</option>
-              <option value="800">800 px</option>
-              <option value="1000">1000 px</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span>Format</span>
-            <select id="file-format">
-              <option value="png">PNG</option>
-              <option value="svg">SVG</option>
-              <option value="pdf">PDF</option>
-            </select>
-          </label>
-        </div>
-
-        <label class="field">
-          <span>Upload Logo (optional)</span>
-          <input id="logo-upload" type="file" accept="image/*"/>
-        </label>
-
-        <label class="field">
-          <span>Logo Size (% of QR)</span>
-          <input id="logo-size" type="range" min="10" max="35" value="20"/>
-        </label>
-
-        <div class="actions">
-          <button id="btn-generate">Generate Preview</button>
-          <button id="btn-clear" class="muted">Clear</button>
-        </div>
-
-        <p class="hint">
-          Note: Pure SVG download is available only <b>without a logo</b>.
-          If a logo is added and you choose SVG, we’ll offer PNG/PDF instead.
-        </p>
-      </section>
-
-      <section class="panel preview">
-        <h2>Preview</h2>
-        <div id="qr-code" class="preview-box"></div>
-
-        <div class="downloads">
-          <a id="download-btn" class="download" download="qrcode.png">Download</a>
-        </div>
-
-        <div id="message" class="message" role="status"></div>
-      </section>
-    </main>
-
-    <footer>
-      <small>Made for your MVP — unlimited edits, quota counts on <b>download</b> only.</small>
-    </footer>
-  </div>
+  <script src="script.js"></script>
 </body>
 </html>
